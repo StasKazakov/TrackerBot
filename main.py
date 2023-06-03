@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
 from aiogram.filters import Text
-from TrackerBot.TrackerBot.tools.keyboard import start_menu, main_menu
-from TrackerBot.TrackerBot.tools.db import Database
+from tools.keyboard import start_menu, main_menu
+from tools.db import Database
 
 load_dotenv()
 logging.basicConfig(filename='all_log.log', level=logging.INFO, format='%(asctime)s - %(levelname)s -%(message)s')
