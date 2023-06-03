@@ -5,17 +5,19 @@ from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
 from aiogram.filters import Text
-from TrackerBot.keyboard import start_menu, main_menu
+from keyboard import start_menu, main_menu
+from db import Database
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=os.getenv('TOKEN_past'))
 dp = Dispatcher()
+db = Database("TrackerBot.db")
 
 
 @dp.message(Command('start'))
 async def starting(message: types.Message, bot: Bot):
-    #here will be function with adding new user to database
+    db.add_user(message.from_user.id)
     await message.answer('Hello!\n Please, choose your language:', reply_markup=start_menu)
 
 @dp.callback_query(Text(text=['en', 'ua', 'ru']))
