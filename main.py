@@ -17,7 +17,7 @@ db = Database("TrackerBot.db")
 
 @dp.message(Command('start'))
 async def starting(message: types.Message, bot: Bot):
-    db.add_user(message.from_user.id)
+    db.add_user(message.from_user.id, message.from_user.last_name)
     await message.answer('Hello!\n Please, choose your language:', reply_markup=start_menu)
 
 @dp.callback_query(Text(text=['en', 'ua', 'ru']))
