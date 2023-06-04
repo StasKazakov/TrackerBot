@@ -29,8 +29,7 @@ db = Database("TrackerBot.db")
 
 async def on_startup(bot: Bot, admin_ids: list[int]):
     await broadcaster.broadcast(bot, admin_ids, "Бот був запущений")
-
-
+    
 
 @dp.message(Command('start'))
 async def starting(message: types.Message):

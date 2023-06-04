@@ -1,6 +1,0 @@
-async def delete(msg):
-    try:
-        await msg.delete()
-    
-    except Exception as e:
-        pass
