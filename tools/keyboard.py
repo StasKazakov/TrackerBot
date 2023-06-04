@@ -15,3 +15,5 @@ main_menu = InlineKeyboardMarkup(inline_keyboard=[
     [types.InlineKeyboardButton(text='Contact us', callback_data='call')],
 ])
 
+cancel_button = InlineKeyboardMarkup(inline_keyboard=[[types.InlineKeyboardButton(text='Cancel', callback_data='cancl')]])
+

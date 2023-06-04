@@ -9,11 +9,12 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
 from aiogram.filters import Text
 from quart import Quart, redirect
-
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import StatesGroup, State
 from config import load_config
 from redirection.url_flask import UTMTracker
 from services import broadcaster
-from tools.keyboard import start_menu, main_menu
+from tools.keyboard import start_menu, main_menu, cancel_button
 from tools.db import Database
 
 logger = logging.getLogger(__name__)
@@ -25,6 +26,17 @@ load_dotenv()
 bot = Bot(token=os.getenv('BOT_TOKEN'))
 dp = Dispatcher()
 db = Database("TrackerBot.db")
+help_id = os.getenv('ADMIN_ID') # ID of the person who will receive requests
+
+class States(StatesGroup):
+    call = State()
+    
+async def delete(msg):
+    try:
+        await msg.delete()
+    
+    except Exception as e:
+        pass
 
 
 async def on_startup(bot: Bot, admin_ids: list[int]):
@@ -65,10 +77,29 @@ async def answer_menu(callback:types.CallbackQuery):
 
 
 @dp.callback_query(Text(text=['call']))
-async def answer_menu(callback:types.CallbackQuery):
-    if callback.message.text != 'Contact us':
-        await callback.message.edit_text(text='Contact us', reply_markup=main_menu, show_alert=False)
-    await callback.answer()
+async def answer_menu(callback:types.CallbackQuery, state: FSMContext ):
+    await callback.message.edit_text(text='Ok, send your request below', reply_markup= cancel_button)
+    await state.set_state(States.call)
+    
+    
+@dp.callback_query(Text(text=['cancl']))
+async def cancel(callback:types.CallbackQuery):
+    msg = await callback.message.answer("Ok, you will be return to main menu")
+    await asyncio.sleep(2)
+    await delete(msg)
+    await callback.message.edit_text("Main Menu", reply_markup = main_menu, show_alert = False)
+    
+
+@dp.message(States.call)
+async def state_call(message: types.Message, state: FSMContext, bot: Bot ):
+    await state.update_data(call = message.text)
+    user_answer = await state.get_data()
+    await bot.send_message(help_id, user_answer['call'])
+    msg = await message.answer("Great! We have notified support about your request.")
+    await message.answer("Main Menu", reply_markup = main_menu, show_alert = False)
+    await asyncio.sleep(5)
+    await delete(msg)
+    await state.clear()
 
 
 @app.route('/', methods=['GET'])
