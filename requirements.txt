@@ -4,6 +4,6 @@ aiogram==3.0.0b7
 python-dotenv==1.0.0
 flask>=2.3.2
 waitress>=2.1.2
-betterlogging
-quart
+betterlogging>=0.2.1
+quart>=0.18.4
 aiogram-dialog>=2.0.0b17

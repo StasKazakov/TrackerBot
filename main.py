@@ -23,11 +23,10 @@ bl.basic_colorized_config(level=log_level)
 app = Quart(__name__)
 load_dotenv()
 
-bot = Bot(token="5989058480:AAGOgpWR7AKu145jA9urg1EqBDUw-TAy3V4") # bot = Bot(token=os.getenv('BOT_TOKEN'))
+bot = Bot(token=os.getenv('BOT_TOKEN'))
 dp = Dispatcher()
 db = Database("TrackerBot.db")
-help_id = "2067639356" # ID of the person who will receive requests
-# help_id = os.getenv('ADMIN_ID')
+help_id = os.getenv('ADMIN_ID') # ID of the person who will receive requests)
 
 class States(StatesGroup):
     call = State()
