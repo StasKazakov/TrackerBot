@@ -4,4 +4,3 @@ __pycache__/
 venv/
 .idea/
 __init__.py/
-.env
