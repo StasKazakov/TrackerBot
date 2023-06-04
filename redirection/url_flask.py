@@ -15,7 +15,7 @@ class UTMTracker:
         self.datetime = datetime.datetime.now().strftime('%H:%M:%S-%d/%m/%Y')
 
     def add_utm_params(self):
-        parsed_url = urlparse(self.url)
+        parsed_url = urlparse('http://127.0.0.1:8000')
         query_params = parsed_url.query
         params = {
             'utm_source': self.utm_source,
