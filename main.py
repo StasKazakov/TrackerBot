@@ -72,6 +72,17 @@ async def answer_menu(callback:types.CallbackQuery):
     await callback.answer()
 
 
+@app.route('/', methods=['GET'])
+async def handle_request():
+    g = ['utm_source', 'utm_medium', 'utm_campaign', 'datetime']
+    redirect_url = UTMTracker('https://t.me/botfatherdev', 'Telegram', 'adv', 'new service').add_utm_params()
+    parsed_url = urlparse(redirect_url)
+    query_params = parse_qs(parsed_url.query)
+    params_list = [f"{i}: {query_params.get(i, [''])[0]}" for i in g]
+    logging.info(params_list)
+    return redirect(parsed_url.geturl())
+
+
 async def main():
     logging.basicConfig(
         level=logging.INFO,
@@ -79,22 +90,12 @@ async def main():
     )
     config = load_config(".env")
     await on_startup(bot, config.tg_bot.admin_ids)
+    await handle_request()
     await dp.start_polling(bot)
 
 
 if __name__ == '__main__':
     asyncio.run(main())
-    @app.route('/', methods=['GET'])
-    async def handle_request():
-        g = ['utm_source', 'utm_medium', 'utm_campaign', 'datetime']
-        redirect_url = UTMTracker('https://t.me/botfatherdev', 'Telegram', 'adv', 'new service').add_utm_params()
-        parsed_url = urlparse(redirect_url)
-        query_params = parse_qs(parsed_url.query)
-        params_list = [f"{i}: {query_params.get(i, [''])[0]}" for i in g]
-        print(*params_list, sep='\n')
-        return redirect(parsed_url.geturl())
+    app.run(host='0.0.0.0', port=8000)
 
 
-    if __name__ == '__main__':
-        asyncio.run(main())
-        app.run(host='0.0.0.0', port=8000)
