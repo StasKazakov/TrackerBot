@@ -31,8 +31,9 @@ help_id = os.getenv('ADMIN_ID') # ID of the person who will receive requests)
 class States(StatesGroup):
     call = State()
     
-async def delete(msg):
+async def delete(msg, time):
     try:
+        await asyncio.sleep(time)
         await msg.delete()
     
     except Exception as e:
@@ -85,8 +86,7 @@ async def answer_menu(callback:types.CallbackQuery, state: FSMContext ):
 @dp.callback_query(Text(text=['cancl']))
 async def cancel(callback:types.CallbackQuery):
     msg = await callback.message.answer("Ok, you will be return to main menu")
-    await asyncio.sleep(2)
-    await delete(msg)
+    await delete(msg, 2)
     await callback.message.edit_text("Main Menu", reply_markup = main_menu, show_alert = False)
     
 
@@ -97,8 +97,7 @@ async def state_call(message: types.Message, state: FSMContext, bot: Bot ):
     await bot.send_message(help_id, user_answer['call'])
     msg = await message.answer("Great! We have notified support about your request.")
     await message.answer("Main Menu", reply_markup = main_menu, show_alert = False)
-    await asyncio.sleep(5)
-    await delete(msg)
+    await delete(msg, 5)
     await state.clear()
 
 
