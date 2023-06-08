@@ -25,7 +25,7 @@ dp: Dispatcher = Dispatcher()
 language_data = Tx()
 
 
-async def on_startup(bot: Bot, admin_ids: list[int]):
+async def on_startup(bot: Bot, admin_ids: int):
     await broadcaster.broadcast(bot, admin_ids, "Бот був запущений")
 
 
@@ -41,15 +41,6 @@ async def language(callback: types.CallbackQuery, state: FSMContext):
     await callback.message.edit_text(text=language_data.menu(db.check_language(int(callback.from_user.id))),
                                      reply_markup=menu_getter(db.check_language(int(callback.from_user.id))), show_alert=False)
 
-@app.route('/', methods=['GET'])  #For Flask
-async def handle_request():
-    g = ['utm_source', 'utm_medium', 'utm_campaign', 'datetime']
-    redirect_url = UTMTracker('https://t.me/botfatherdev', 'Telegram', 'adv', 'new service').add_utm_params()
-    parsed_url = urlparse(redirect_url)
-    query_params = parse_qs(parsed_url.query)
-    params_list = [f"{i}: {query_params.get(i, [''])[0]}" for i in g]
-    logging.info(params_list)
-    return redirect(parsed_url.geturl())
 
 async def main():
     #logging
@@ -71,4 +62,4 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
-    app.run(host='0.0.0.0', port=8000)
+  
