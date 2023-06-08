@@ -4,14 +4,6 @@ from typing import Optional
 from environs import Env
 
 
-@dataclass
-class DbConfig:
-    host: str
-    password: str
-    user: str
-    database: str
-    port: int = 5432
-
     # For SQLAlchemy
     # def construct_sqlalchemy_url(self, driver="asyncpg", host=None, port=None) -> URL:
     #     if not host:
