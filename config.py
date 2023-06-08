@@ -34,6 +34,13 @@ class TgBot:
     token: str
     admin_ids: list[int]
 
+@dataclass
+class DbConfig:
+    host: str
+    password: str
+    user: str
+    database: str
+
 
 @dataclass
 class Miscellaneous:
@@ -44,7 +51,7 @@ class Miscellaneous:
 class Config:
     tg_bot: TgBot
     misc: Miscellaneous
-    db: DbConfig = None
+    db: DbConfig 
 
 
 def load_config(path: str = None) -> Config:
@@ -54,15 +61,16 @@ def load_config(path: str = None) -> Config:
     return Config(
         tg_bot=TgBot(
             token=env.str("BOT_TOKEN"),
-            admin_ids=list(map(int, env.list("ADMINS"))),
+            admin_ids=env.list("ADMINS"),
         ),
 
-        # db=DbConfig(
-        #     host=env.str('DB_HOST'),
-        #     password=env.str('POSTGRES_PASSWORD'),
-        #     user=env.str('POSTGRES_USER'),
-        #     database=env.str('POSTGRES_DB'),
-        # ),
+        db=DbConfig(
+            host=env.str('DB_HOST'),
+            password=env.str('MYSQL_PASSWORD'),
+            user=env.str('MYSQL_USER'),
+            database=env.str('MYSQL_DB')
+        ),
+        
 
         # redis=RedisConfig(
         #     redis_pass=env.str("REDIS_PASSWORD"),

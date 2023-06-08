@@ -1,41 +1,55 @@
-import sqlite3
-
+import pymysql
 
 class Database:
     
-    
-    def __init__(self, db_file):
-        self.connection = sqlite3.connect(db_file)
-        self.cursor = self.connection.cursor()
-         
-    
-    def add_user(self, user_id, name_tg):
-        with self.connection:
-            result = self.cursor.execute("SELECT user_id FROM user_lang WHERE user_id = ?", (user_id,)).fetchall()
-            if bool(len(result)) == False:
-                return self.connection.execute("INSERT INTO user_lang (user_id, name_tg) VALUES (?,?)", (user_id, name_tg ))
-            else:
-                pass   
-    
-    
-    def save_language(self, language, user_id):
-        with self.connection:
-            return self.connection.execute("UPDATE user_lang  SET user_language = ? WHERE user_id = ?", (language, user_id ))
-    
-    
-    def check_language(self, user_id):
-        with self.connection:
-            res = self.cursor.execute("SELECT user_language FROM user_lang WHERE user_id = ?", (user_id,)).fetchone()
-            return ''.join(res)
+    def __init__ (self, param_host: str, param_user: str, param_password: str, param_database: str) -> None:
+        self.connection = pymysql.connect(host=param_host,
+                            user= param_user,
+                            password= param_password,
+                            database= param_database,
+                            charset='utf8mb4',
+                            cursorclass=pymysql.cursors.DictCursor)
         
+        
+        
+    def add_user(self, user_id: int, tg_name: str) -> None:
+        with self.connection.cursor() as cursor:
+                sql_request = "SELECT user_id FROM user_lang WHERE user_id = %s" 
+                cursor.execute(sql_request, (user_id,))
+                result = cursor.fetchall()
+                if bool(len(result)) == False:
+                    sql_formula = "INSERT INTO user_lang (user_id, tg_name) VALUES (%s, %s)"
+                    cursor.execute(sql_formula, (user_id, tg_name))
+                    self.connection.commit()
+                else:
+                    pass
+            
+    
+    def save_language(self, language: str, user_id: int) -> None:
+        with self.connection.cursor() as cursor:
+                sql_formula =  "UPDATE user_lang  SET lang = %s WHERE user_id = %s"
+                cursor.execute(sql_formula, (language, user_id))
+                self.connection.commit()
+            
+    
+    def check_language(self, user_id: int) -> str:
+        with self.connection.cursor() as cursor:
+                sql_request = "SELECT lang FROM user_lang WHERE user_id =  %s"
+                cursor.execute(sql_request, user_id)
+                res = cursor.fetchone()
+                print(res)
+                return res.get('lang')
+            
+    
+    def delete_user(self, user_id: int) -> None:
+        with self.connection.cursor() as cursor:
+                cursor.execute("DELETE FROM user_lang WHERE user_id = %s" % user_id)
+                self.connection.commit()
     
     
-    def save_link(self, user_id, root_link, track_link):
+    def save_link(self, user_id, root_link, track_link, data_time) -> None:
         # This function is not complete, will change in future commits
-        with self.connection:
-            return self.cursor.execute("INSERT INTO keys (user_id, root_link, track_link) VALUES (?,?,?)", (user_id, root_link, track_link))
-        
-    
-    def save_event(self, user_id, root_link, track_link, data_time):
-        with self.connection:
-            return self.cursor.execute("INSERT INTO Events (user_id, root_link, track_link, data_time ) VALUES (?,?,?,?)", (user_id, root_link, track_link, data_time))
+        with self.connection.cursor() as cursor:
+                sql_formula = "INSERT INTO users (user_id, root_link, track_link, data_time ) VALUES (%s,%s,%s,%s)" 
+                cursor.execute(sql_formula, (user_id, root_link, track_link, data_time))
+                self.connection.commit()

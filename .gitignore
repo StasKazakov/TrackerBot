@@ -5,3 +5,4 @@ venv/
 *.venv/
 .idea/
 __init__.py/
+all_log.log
