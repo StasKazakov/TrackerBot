@@ -14,7 +14,7 @@ from tools.delete import delete
 
 router = Router()
 config: Config = load_config()
-db = Database(config.db.host, config.db.user, config.db.password, config.db.database)
+db = Database("TrackerBot.db")
 
 async def state_geter(strs: str) -> str:
     return strs.split(':')[1]

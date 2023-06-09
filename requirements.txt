@@ -6,4 +6,3 @@ flask>=2.3.2
 waitress>=2.1.2
 betterlogging~=0.2.1
 quart~=0.18.4
-pymysql>=1.0.3

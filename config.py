@@ -4,14 +4,6 @@ from typing import Optional
 from environs import Env
 
 
-@dataclass
-class DbConfig:
-    host: str
-    password: str
-    user: str
-    database: str
-    port: int = 5432
-
     # For SQLAlchemy
     # def construct_sqlalchemy_url(self, driver="asyncpg", host=None, port=None) -> URL:
     #     if not host:
@@ -35,12 +27,12 @@ class TgBot:
     admin_ids: int
     
 
-@dataclass
-class DbConfig:
-    host: str
-    password: str
-    user: str
-    database: str
+# @dataclass
+# class DbConfig:
+#    host: str
+#    password: str
+#    user: str
+#    database: str
 
 
 @dataclass
@@ -52,7 +44,7 @@ class Miscellaneous:
 class Config:
     tg_bot: TgBot
     misc: Miscellaneous
-    db: DbConfig 
+#    db: DbConfig 
 
 
 def load_config(path: str = None) -> Config:
@@ -65,12 +57,12 @@ def load_config(path: str = None) -> Config:
             admin_ids=env.list("ADMINS"),
         ),
 
-        db=DbConfig(
-            host=env.str('DB_HOST'),
-            password=env.str('MYSQL_PASSWORD'),
-            user=env.str('MYSQL_USER'),
-            database=env.str('MYSQL_DB')
-        ),
+#        db=DbConfig(
+#            host=env.str('DB_HOST'),
+#            password=env.str('MYSQL_PASSWORD'),
+#            user=env.str('MYSQL_USER'),
+#            database=env.str('MYSQL_DB')
+#        ),
         
 
         # redis=RedisConfig(
