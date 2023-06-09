@@ -19,8 +19,7 @@ from tools.db import Database
 from handlers.language_data import Text as Tx
 
 app = Quart(__name__)
-config: Config = load_config()
-db = Database(config.db.host, config.db.user, config.db.password, config.db.database)
+db = Database("TrackerBot.db")
 dp: Dispatcher = Dispatcher()
 language_data = Tx()
 
@@ -48,6 +47,7 @@ async def main():
     bl.basic_colorized_config(level=logging.INFO)
 
     #connecting all packages and environment variables
+    config: Config = load_config()
     bot: Bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
 
     #adding routers
