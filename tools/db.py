@@ -24,8 +24,11 @@ class Database:
             res = self.cursor.execute("SELECT user_language FROM user_lang WHERE user_id = ?", (user_id,)).fetchone()
             return ''.join(res)
 
-
     def save_link(self, user_id, root_link, track_link):
         # This function is not complete, will change in future commits
         with self.connection:
             return self.cursor.execute("INSERT INTO keys (user_id, root_link, track_link) VALUES (?,?,?)", (user_id, root_link, track_link))
+    
+    def save_event(self, user_id, root_link, track_link, data_time):
+        with self.connection:
+            return self.cursor.execute("INSERT INTO Events (user_id, root_link, track_link, data_time) VALUES (?,?,?)", (user_id, root_link, track_link, data_time))
