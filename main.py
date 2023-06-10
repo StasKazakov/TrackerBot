@@ -1,22 +1,17 @@
 import logging
 import asyncio
-import os
-from urllib.parse import urlparse, parse_qs
 import betterlogging as bl
-from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
 from aiogram.filters import Text
-from quart import Quart, redirect
+from quart import Quart
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import StatesGroup, State
 from config import Config, load_config
-from redirection.url_flask import UTMTracker
 from services import broadcaster
-from tools.keyboard import start_menu, menu_getter, cancel_button
-from handlers import user_handlers, admin_handlers
+from tools.keyboard import start_menu, menu_getter
+from handlers import user_handlers
 from tools.db import Database
-from handlers.language_data import Text as Tx
+from TrackerBot.tools.language_data import Text as Tx
 
 app = Quart(__name__)
 db = Database("TrackerBot.db")
@@ -30,15 +25,17 @@ async def on_startup(bot: Bot, admin_ids: int):
 
 @dp.message(Command('start'))
 async def starting(message: types.Message):
-    db.add_user(message.from_user.id, str(message.from_user.full_name))
+    await db.add_user(str(message.from_user.id), str(message.from_user.full_name))
+    await message.reply(text="Hi👋 This bot will help you keep track amount of clicks on your links!\nLet's get started!")
     await message.answer(language_data.choose_language(Tx), reply_markup=start_menu)
 
 @dp.callback_query(Text(text=['en', 'ua', 'ru']))
-async def language(callback: types.CallbackQuery, state: FSMContext):
-    db.save_language(callback.data, int(callback.from_user.id))
-    await callback.answer(callback.message.text, show_alert=False)
-    await callback.message.edit_text(text=language_data.menu(db.check_language(int(callback.from_user.id))),
-                                     reply_markup=menu_getter(db.check_language(int(callback.from_user.id))), show_alert=False)
+async def language(callback: types.CallbackQuery, state: FSMContext, bot: Bot):
+    await db.save_language(callback.data, str(callback.from_user.id))
+    lang = await db.check_language(str(callback.from_user.id))
+    await bot.send_message(callback.from_user.id, text=language_data.message_for_new_user(lang))
+    await callback.message.edit_text(text=language_data.menu(lang),
+                                     reply_markup=menu_getter(lang), show_alert=False)
 
 
 async def main():
