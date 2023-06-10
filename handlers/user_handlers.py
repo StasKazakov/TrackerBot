@@ -23,26 +23,26 @@ async def state_geter(strs: str) -> str:
 async def answer_menu(callback: types.CallbackQuery, state: FSMContext):
     if callback.message.text != 'Add link':
         await callback.message.edit_text(text='Add link',
-                                         reply_markup=menu_getter(db.check_language(int(callback.from_user.id))), show_alert=False)
+                                         reply_markup=menu_getter(db.check_language(callback.from_user.id)), show_alert=False)
     await callback.answer()
 
 @router.callback_query(Text(text=['state']))
 async def answer_menu(callback: types.CallbackQuery):
     if callback.message.text != 'Statistics':
         await callback.message.edit_text(text='Statistics',
-                                         reply_markup=menu_getter(db.check_language(int(callback.from_user.id))), show_alert=False)
+                                         reply_markup=menu_getter(db.check_language(callback.from_user.id)), show_alert=False)
     await callback.answer()
 
 @router.callback_query(Text(text=['help']))
 async def answer_menu(callback: types.CallbackQuery):
     if callback.message.text != 'Instruction':
         await callback.message.edit_text(text='Instruction',
-                                         reply_markup=menu_getter(db.check_language(int(callback.from_user.id))), show_alert=False)
+                                         reply_markup=menu_getter(db.check_language(callback.from_user.id)), show_alert=False)
     await callback.answer()
 
 @router.callback_query(Text(text=['call']))
 async def answer_menu(callback: types.CallbackQuery, state: FSMContext):
-    await callback.message.edit_text(text='Ok, send your request below', reply_markup= cancel_button(db.check_language(int(callback.from_user.id))))
+    await callback.message.edit_text(text='Ok, send your request below', reply_markup= cancel_button(db.check_language(callback.from_user.id)))
     await state.set_state(States.call)
 
 @router.callback_query(Text(text=['cancel']), StateFilter(States.call))
@@ -50,7 +50,7 @@ async def cancel(callback: types.CallbackQuery, state: FSMContext):
     msg = await callback.message.answer("Ok, you will be return to main menu")
     await delete(msg, time=3)
     await callback.message.edit_text("Main Menu",
-                                     reply_markup=menu_getter(db.check_language(int(callback.from_user.id))), show_alert=False)
+                                     reply_markup=menu_getter(db.check_language(callback.from_user.id)), show_alert=False)
     await state.clear()
 
 @router.message(StateFilter(States.call))
@@ -63,5 +63,5 @@ async def state_call(message: types.Message, callback: types.CallbackQuery, stat
     await delete(msg, time=3)
     
     await message.answer("Main Menu",
-                         reply_markup=menu_getter(db.check_language(int(callback.from_user.id))), show_alert=False)
+                         reply_markup=menu_getter(db.check_language(callback.from_user.id)), show_alert=False)
     await state.clear()

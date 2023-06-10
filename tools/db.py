@@ -1,34 +1,39 @@
-import sqlite3
+import aiosqlite
 
 
 class Database:
 
-    def __init__(self, db_file):
-        self.connection = sqlite3.connect(db_file)
-        self.cursor = self.connection.cursor()
-
-    def add_user(self, user_id, name_tg):
-        with self.connection:
-            result = self.cursor.execute("SELECT user_id FROM user_lang WHERE user_id = ?", (user_id,)).fetchall()
-            if bool(len(result)) == False:
-                return self.connection.execute("INSERT INTO user_lang (user_id, name_tg) VALUES (?,?)", (user_id, name_tg ))
+    def __init__(self, db_pass: str):
+        self.db_pass = db_pass
+        
+    async def add_user(self, user_id: str, name_tg: str) -> None:
+        async with aiosqlite.connect(self.db_pass) as db:
+            cursor = await db.execute("SELECT user_id FROM user_lang WHERE user_id = ?", (user_id,))
+            res = await cursor.fetchall()
+            if bool(len(res)) == False:
+                await db.execute("INSERT INTO user_lang (user_id, name_tg) VALUES (?,?)", (user_id, name_tg ))
+                await db.commit()
             else:
                 pass
-
-    def save_language(self, language, user_id):  # Saving chose language to database
-        with self.connection:
-            return self.connection.execute("UPDATE user_lang  SET user_language = ? WHERE user_id = ?", (language, user_id ))
-
-    def check_language(self, user_id):  # Function will check ordered language
-        with self.connection:
-            res = self.cursor.execute("SELECT user_language FROM user_lang WHERE user_id = ?", (user_id,)).fetchone()
-            return ''.join(res)
-
-    def save_link(self, user_id, root_link, track_link):
-        # This function is not complete, will change in future commits
-        with self.connection:
-            return self.cursor.execute("INSERT INTO keys (user_id, root_link, track_link) VALUES (?,?,?)", (user_id, root_link, track_link))
     
-    def save_event(self, user_id, root_link, track_link, data_time):
-        with self.connection:
-            return self.cursor.execute("INSERT INTO Events (user_id, root_link, track_link, data_time) VALUES (?,?,?)", (user_id, root_link, track_link, data_time))
+    async def save_language(self, user_id: str, language: str) -> None: # Saving chose language to database  
+        async with aiosqlite.connect(self.db_pass) as db:
+            await db.execute("UPDATE user_lang  SET user_language = ? WHERE user_id = ?", (language, user_id ))
+            await db.commit()
+            
+    async def check_language(self, user_id: str) -> str:  # Function will check ordered language
+        async with aiosqlite.connect(self.db_pass) as db:
+            cur =  await db.execute("SELECT user_language FROM user_lang WHERE user_id = ?", (user_id,))
+            res = await cur.fetchone()
+            return ''.join(res)
+    
+    async def save_user_link(self, user_id: str, user_link: str, uuid_code: str) -> None:
+        async with aiosqlite.connect(self.db_pass) as db:
+            pass
+        
+    async def save_date_time(self, user_id: str, data_time: str):
+        async with aiosqlite.connect(self.db_pass) as db:
+            pass
+        
+
+    
