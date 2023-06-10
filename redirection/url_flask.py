@@ -5,14 +5,14 @@ from urllib.parse import urlparse, urlencode, urlunparse
 
 '''-----------------CLASS VERSION-----------------'''
 class UTMTracker:
-    def init(self, user_id):
-        self.user_id = user_id
+    def __init__(self, link_id):
+        self.link_id = link_id
 
     def add_utm_params(self):
-        parsed_url = urlparse('http://tracklink.tech')
-        query_params = parsed_url.query
+        parsed_url = urlparse('http://127.0.0.1:8000')
         params = {
-            'user_id': self.user_id,
+            'link_id': self.link_id,
+
         }
 
         # Build the updated URL with UTM parameters
