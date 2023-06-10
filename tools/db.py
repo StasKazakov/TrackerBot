@@ -1,5 +1,7 @@
 import aiosqlite
-
+import json
+import asyncio
+from datetime import datetime
 
 class Database:
 
@@ -27,13 +29,32 @@ class Database:
             res = await cur.fetchone()
             return ''.join(res)
     
-    async def save_user_link(self, user_id: str, user_link: str, uuid_code: str) -> None:
+    async def save_user_link(self, user_id: str, link: dict) -> None:
         async with aiosqlite.connect(self.db_pass) as db:
-            pass
-        
-    async def save_date_time(self, user_id: str, data_time: str):
+            # time =  datetime.now().strftime("%d-%m-%Y %H:%M")
+            # self.save_date_time(user_id, time)
+            # example =  json.dumps({'597e4b43-d995-426c-a25a-3f535624c998': 'http://link.com'})
+            str = json.dumps(link)
+            await db.execute("INSERT INTO Events (user_id, root_link) VALUES (?,?)", (user_id, str))
+            await db.commit()
+            
+    async def save_date_time(self, user_id: str, date_time: str):
         async with aiosqlite.connect(self.db_pass) as db:
-            pass
-        
-
+            await db.execute("UPDATE Events  SET date_time = ? WHERE user_id = ?", (date_time, user_id ))
+            await db.commit()
     
+    async def get_user_link(self, user_id: str, uuid_code: str) -> str:
+        async with aiosqlite.connect(self.db_pass) as db: 
+            cur =  await db.execute("SELECT root_link FROM Events WHERE user_id = ?", (user_id,))
+            row = await cur.fetchone()
+            res = ''.join(row)
+            dict = json.loads(res)
+            result = dict.get(uuid_code)
+            return result
+    
+async def main() -> None:
+    db = Database("TrackerBot.db")
+    print(await db.get_user_link("660", "597e4b43-d995-426c-a25a-3f535624c998"))
+    
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
