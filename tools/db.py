@@ -22,7 +22,7 @@ class Database:
     def check_language(self, user_id):  # Function will check ordered language
         with self.connection:
             res = self.cursor.execute("SELECT user_language FROM user_lang WHERE user_id = ?", (user_id,)).fetchone()
-            return ''.join(res)
+            return res[0] if res[0] is not None else None
 
     def save_link(self, user_id, root_link, track_link):
         # This function is not complete, will change in future commits

@@ -8,8 +8,8 @@ start_menu = InlineKeyboardMarkup(inline_keyboard=[
 ], )
 
 main_menu_text_eng = {'Add link': 'link', 'Statistics': 'state', 'Instruction': 'help', 'Contact us': 'call'}
-main_menu_text_ua = {'Додати посилання': 'link', 'Статистика': 'state', 'Допомога': 'help', "Зворотній зв'язок": 'call'}
-main_menu_text_ru = {'Добавление ссылки': 'link', 'Статистика': 'state', 'Помощь': 'help', 'Обратная связь': 'call'}
+main_menu_text_ua = {'Додати посилання': 'link', 'Статистика': 'state', 'Інструкція': 'help', "Контакти": 'call'}
+main_menu_text_ru = {'Добавить ссылку': 'link', 'Статистика': 'state', 'Инструкция': 'help', 'Контакты': 'call'}
 
 def article_getter(lang, article) -> InlineKeyboardMarkup:
     return None
