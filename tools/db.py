@@ -27,8 +27,9 @@ class Database:
             cur = await db.execute("SELECT user_language FROM user_lang WHERE user_id = ?", (user_id,))
             res = await cur.fetchone()
             return ''.join(res)
-    
+
     async def save_user_link(self, user_id: str, link: str, link_id: str): # Save user_link to db
+
         async with aiosqlite.connect(self.db_pass) as db:
             # time =  datetime.now().strftime("%d-%m-%Y %H:%M")
             # self.save_date_time(user_id, time)
