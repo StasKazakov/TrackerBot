@@ -10,8 +10,8 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-
-from redirection.url_flask import UTMTracker
+from run import db
+from url_flask import UTMTracker
 from tools.db import Database
 from tools.keyboard import menu_getter, start_menu, cancel_button
 from tools.states import States
@@ -20,7 +20,6 @@ from main import language_data
 
 router = Router()
 config: Config = load_config()
-db = Database("TrackerBot.db")
 
 async def state_geter(strs: str) -> str:
     return strs.split(':')[1]
@@ -43,14 +42,12 @@ async def answer_menu(message: types.Message, state: FSMContext, bot: Bot):
     g = ['www', 'https', '://']
     redirect_url = ""
     if all([True if i in message.text else False for i in g]):
-
         link = message.text
         user_id = message.from_user.id
         link_id = str(uuid.uuid4())
-
         await db.save_user_link(str(user_id), link, link_id)
         redirect_url = UTMTracker(link_id).add_utm_params()
-    await message.answer(redirect_url) # here must be READY LINK
+        await message.answer(redirect_url) # here must be READY LINK
     await state.clear()
 
 @router.callback_query(Text(text=['state']))

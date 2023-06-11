@@ -29,10 +29,11 @@ class Database:
             res = await cur.fetchone()
             return ''.join(res)
 
-    async def save_user_link(self, user_id: str, orig_link: str, link_id: str, link_name: str) -> None: # Save user_link to db
+    async def save_user_link(self, user_id: str, orig_link: str, link_id: str) -> list: # Save user_link to db
         async with aiosqlite.connect(self.db_pass) as db:
             await db.execute("INSERT INTO links (link_id, user_id, orig_link) VALUES (?,?,?)", (link_id, user_id, orig_link))
             await db.commit()
+            return [user_id, orig_link, link_id]
                         
     async def save_date_time(self, user_id: str, date_time: str) -> None: # Save date_time to db
         async with aiosqlite.connect(self.db_pass) as db:
