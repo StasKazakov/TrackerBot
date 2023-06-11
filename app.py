@@ -2,8 +2,12 @@ import logging
 from urllib.parse import urlparse, parse_qs
 
 from quart import request, redirect, Quart
-
 from run import db
+
+<<<<<<< HEAD
+from run import db
+=======
+>>>>>>> upstream/main
 
 app = Quart(__name__)
 

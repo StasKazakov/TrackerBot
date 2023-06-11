@@ -13,6 +13,10 @@ from tools.keyboard import start_menu, menu_getter
 from handlers import user_handlers
 from tools.db import Database
 from tools.language_data import Text as Tx
+from run import db
+
+
+
 
 dp: Dispatcher = Dispatcher()
 language_data = Tx()
@@ -30,7 +34,7 @@ async def starting(message: types.Message):
 
 @dp.callback_query(Text(text=['en', 'ua', 'ru']))
 async def language(callback: types.CallbackQuery, state: FSMContext, bot: Bot):
-    await db.save_language(callback.data, str(callback.from_user.id))
+    await db.save_language(str(callback.from_user.id), callback.data)
     lang = await db.check_language(str(callback.from_user.id))
     await bot.send_message(callback.from_user.id, text=language_data.message_for_new_user(lang))
     await callback.message.edit_text(text=language_data.menu(lang),
