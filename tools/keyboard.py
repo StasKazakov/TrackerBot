@@ -8,8 +8,8 @@ start_menu = InlineKeyboardMarkup(inline_keyboard=[
 ], )
 
 main_menu_text_eng = {'Add link': 'link', 'Statistics': 'state', 'Instruction': 'help', 'Contact us': 'call'}
-main_menu_text_ua = {'Додати посилання': 'link', 'Статистика': 'state', 'Допомога': 'help', "Зворотній зв'язок": 'call'}
-main_menu_text_ru = {'Добавление ссылки': 'link', 'Статистика': 'state', 'Помощь': 'help', 'Обратная связь': 'call'}
+main_menu_text_ua = {'Додати посилання': 'link', 'Статистика': 'state', "Інструкція": 'help', "Контакти": 'call'}
+main_menu_text_ru = {'Добавление ссылки': 'link', 'Статистика': 'state', "Инструкция": 'help', "Контакты": 'call'}
 
 def article_getter(lang, article) -> InlineKeyboardMarkup:
     return None
@@ -33,7 +33,7 @@ def menu_getter(lang) -> InlineKeyboardMarkup:
                              main_menu_text_ru.items()])
         return main_menu
 
-def cancel_button(lang) -> InlineKeyboardMarkup:
+def cancel_button(lang: str) -> InlineKeyboardMarkup:
     if lang == 'en':
         button = InlineKeyboardMarkup(inline_keyboard=[[types.InlineKeyboardButton(text='Cancel', callback_data='cancel')]])
         return button
@@ -42,4 +42,21 @@ def cancel_button(lang) -> InlineKeyboardMarkup:
         return button
     elif lang == 'ru':
         button = InlineKeyboardMarkup(inline_keyboard=[[types.InlineKeyboardButton(text='Отмена', callback_data='cancel')]])
+        return button
+
+def periods(lang: str) -> InlineKeyboardMarkup:
+    if lang == 'en':
+        button = InlineKeyboardMarkup(inline_keyboard=[
+            [types.InlineKeyboardButton(text="All time", callback_data='alltime')],
+            [types.InlineKeyboardButton(text='Select dates', callback_data='select_dates')]])
+        return button
+    elif lang == 'ua':
+        button = InlineKeyboardMarkup(inline_keyboard=[
+            [types.InlineKeyboardButton(text="За весь період", callback_data='alltime')],
+            [types.InlineKeyboardButton(text="Вибрати дати", callback_data='select_dates')]])
+        return button
+    elif lang == 'en':
+        button = InlineKeyboardMarkup(inline_keyboard=[
+            [types.InlineKeyboardButton(text="За весь период", callback_data='alltime')],
+            [types.InlineKeyboardButton(text="Выбрать даты", callback_data='select_dates')]])
         return button

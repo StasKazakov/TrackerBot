@@ -23,7 +23,7 @@ class Database:
             
     async def check_language(self, user_id: str) -> str:  # Function will check ordered language
         async with aiosqlite.connect(self.db_pass) as db:
-            cur =  await db.execute("SELECT user_language FROM user_lang WHERE user_id = ?", (user_id,))
+            cur = await db.execute("SELECT user_language FROM user_lang WHERE user_id = ?", (user_id,))
             res = await cur.fetchone()
             return ''.join(res)
     
