@@ -1,3 +1,4 @@
+import logging
 import random
 
 import uuid
@@ -44,6 +45,7 @@ async def answer_menu(message: types.Message, state: FSMContext, bot: Bot):
 
 @router.message(StateFilter(States.link_awaiting))  # This function will get the link, prepare, and send to user
 async def answer_menu(message: types.Message, state: FSMContext, bot: Bot):
+    logging.info('trying to convert link')
     lang = await db.check_language(str(message.from_user.id))
     link_name = await state.get_data()
     g = ['www', 'https', '://']
