@@ -11,7 +11,7 @@ from services import broadcaster
 from tools.keyboard import start_menu, menu_getter
 from handlers import user_handlers
 from tools.db import Database
-from TrackerBot.tools.language_data import Text as Tx
+from tools.language_data import Text as Tx
 
 app = Quart(__name__)
 db = Database("TrackerBot.db")
