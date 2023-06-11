@@ -1,5 +1,8 @@
 import asyncio
 import random
+
+import uuid
+
 from config import Config, load_config
 from aiogram import Router, types
 from aiogram.filters import Command, CommandStart, Text, StateFilter
@@ -7,6 +10,8 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
+
+from redirection.url_flask import UTMTracker
 from tools.db import Database
 from tools.keyboard import menu_getter, start_menu, cancel_button
 from tools.states import States
@@ -35,7 +40,17 @@ async def answer_menu(message: types.Message, state: FSMContext, bot: Bot):
 async def answer_menu(message: types.Message, state: FSMContext, bot: Bot):
     lang = await db.check_language(str(message.from_user.id))
     # part for Dania !!!!! PAY ATTENTION FOR language_data.wrong_link and lionk_getter methods!!!!!
-    await message.answer(language_data.link_getter(lang), reply_markup=menu_getter(lang)) # here must be READY LINK
+    lang = await db.check_language(str(message.from_user.id))
+    g = ['www', 'https', '://']
+    redirect_url = ""
+    if all([True if i in message.text else False for i in g]):
+        link = message.text
+        user_id = message.from_user.id
+        link_id = str(uuid.uuid4())
+
+        f = Database.save_user_link(user_id, link, link_id)
+        redirect_url = UTMTracker(link_id).add_utm_params()
+    await message.answer(redirect_url) # here must be READY LINK
     await state.clear()
 
 @router.callback_query(Text(text=['state']))
