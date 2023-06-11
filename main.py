@@ -7,14 +7,13 @@ from aiogram.filters import Text
 from quart import Quart
 from aiogram.fsm.context import FSMContext
 from config import Config, load_config
+from run import db
 from services import broadcaster
 from tools.keyboard import start_menu, menu_getter
 from handlers import user_handlers
 from tools.db import Database
 from tools.language_data import Text as Tx
 
-app = Quart(__name__)
-db = Database("TrackerBot.db")
 dp: Dispatcher = Dispatcher()
 language_data = Tx()
 
