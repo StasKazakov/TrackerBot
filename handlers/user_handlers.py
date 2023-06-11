@@ -1,17 +1,17 @@
 import asyncio
 import random
-from TrackerBot.config import Config, load_config
+from config import Config, load_config
 from aiogram import Router, types
 from aiogram.filters import Command, CommandStart, Text, StateFilter
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-from TrackerBot.tools.db import Database
-from TrackerBot.tools.keyboard import menu_getter, start_menu, cancel_button
-from TrackerBot.tools.states import States
-from TrackerBot.tools.delete import delete
-from TrackerBot.main import language_data
+from tools.db import Database
+from tools.keyboard import menu_getter, start_menu, cancel_button
+from tools.states import States
+from tools.delete import delete
+from main import language_data
 
 router = Router()
 config: Config = load_config()
