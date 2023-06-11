@@ -1,29 +1,32 @@
 import logging
 import asyncio
-import betterlogging as bl
+
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
 from aiogram.filters import Text
-from quart import Quart
+
 from aiogram.fsm.context import FSMContext
 from config import Config, load_config
-from run import db
+
 from services import broadcaster
 from tools.keyboard import start_menu, menu_getter
 from handlers import user_handlers
-from tools.db import Database
+
 from tools.language_data import Text as Tx
 from run import db
+import betterlogging as bl
 
-
-
+'''nice logging info here'''
+logger = logging.getLogger(__name__)
+log_level = logging.INFO
+bl.basic_colorized_config(level=log_level)
 
 dp: Dispatcher = Dispatcher()
 language_data = Tx()
 
 
 async def on_startup(bot: Bot, admin_ids: int):
-    await broadcaster.broadcast(bot, admin_ids, "Бот був запущений")
+    await broadcaster.broadcast(bot, admin_ids, "Bot was started")
 
 
 @dp.message(Command('start'))
@@ -58,7 +61,9 @@ async def main():
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
-
 if __name__ == '__main__':
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except (KeyboardInterrupt, SystemExit):
+        logger.error("Bot was shutted down!!!")
   
