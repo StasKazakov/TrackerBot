@@ -39,16 +39,16 @@ async def answer_menu(message: types.Message, state: FSMContext, bot: Bot):
 @router.message(StateFilter(States.link_awaiting))  # This function will get the link, prepare, and send to user
 async def answer_menu(message: types.Message, state: FSMContext, bot: Bot):
     lang = await db.check_language(str(message.from_user.id))
-    # part for Dania !!!!! PAY ATTENTION FOR language_data.wrong_link and lionk_getter methods!!!!!
-    lang = await db.check_language(str(message.from_user.id))
+
     g = ['www', 'https', '://']
     redirect_url = ""
     if all([True if i in message.text else False for i in g]):
+
         link = message.text
         user_id = message.from_user.id
         link_id = str(uuid.uuid4())
 
-        f = Database.save_user_link(user_id, link, link_id)
+        await db.save_user_link(str(user_id), link, link_id)
         redirect_url = UTMTracker(link_id).add_utm_params()
     await message.answer(redirect_url) # here must be READY LINK
     await state.clear()
