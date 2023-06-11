@@ -39,19 +39,20 @@ async def answer_menu(callback: types.CallbackQuery, state: FSMContext, bot: Bot
 @router.message(StateFilter(States.name_of_link))
 async def answer_menu(message: types.Message, state: FSMContext, bot: Bot):
     await message.answer(language_data.link_awaiting(await db.check_language(str(message.from_user.id))))
+    await state.update_data(name_of_link = message.text)
     await state.set_state(States.link_awaiting)
 
 @router.message(StateFilter(States.link_awaiting))  # This function will get the link, prepare, and send to user
 async def answer_menu(message: types.Message, state: FSMContext, bot: Bot):
     lang = await db.check_language(str(message.from_user.id))
-
+    link_name = await state.get_data()
     g = ['www', 'https', '://']
     redirect_url = ""
     if all([True if i in message.text else False for i in g]):
         link = message.text
         user_id = message.from_user.id
         link_id = str(uuid.uuid4())
-        await db.save_user_link(str(user_id), link, link_id)
+        await db.save_user_link(str(user_id), link, link_id, link_name['name_of_link'])
         redirect_url = UTMTracker(link_id).add_utm_params()
         await message.answer(redirect_url) # here must be READY LINK
     await state.clear()

@@ -29,15 +29,9 @@ class Database:
             res = await cur.fetchone()
             return ''.join(res)
 
-    async def save_user_link(self, user_id: str, orig_link: str, link_id: str) -> list: # Save user_link to db
+    async def save_user_link(self, user_id: str, orig_link: str, link_id: str, link_name: str) -> None: # Save user_link to db
         async with aiosqlite.connect(self.db_pass) as db:
-            await db.execute("INSERT INTO links (link_id, user_id, orig_link) VALUES (?,?,?)", (link_id, user_id, orig_link))
-            await db.commit()
-            return [user_id, orig_link, link_id]
-                        
-    async def save_date_time(self, user_id: str, date_time: str) -> None: # Save date_time to db
-        async with aiosqlite.connect(self.db_pass) as db:
-            await db.execute("UPDATE Events  SET date_time = ? WHERE user_id = ?", (date_time, user_id ))
+            await db.execute("INSERT INTO links (link_id, user_id, orig_link, link_name) VALUES (?,?,?,?)", (link_id, user_id, orig_link, link_name))
             await db.commit()
     
     async def get_user_link(self, link_id: str) -> str: # Get user link
@@ -48,4 +42,30 @@ class Database:
                 return "No link for this link_id"
             else:
                 return ''.join(row)
-    
+            
+    async def get_names_link(self, user_id: str) -> list: 
+        async with aiosqlite.connect(self.db_pass) as db: 
+            cur =  await db.execute("SELECT link_name FROM links WHERE user_id = ?", (user_id,))
+            row = await cur.fetchall() 
+            list = []
+            for names in row:
+                    list.append(''.join(names))
+            return list
+       
+    async def check_name_link(self, user_id: str, link_name: str) -> bool:
+         async with aiosqlite.connect(self.db_pass) as db:
+            cur =  await db.execute("SELECT link_name FROM links WHERE user_id = ?", (user_id,))
+            res = await cur.fetchall() 
+            list = []
+            for names in res:
+                    list.append(''.join(names))
+            if link_name in list:
+                return True
+            elif link_name not in list:
+                return False
+         
+    async def save_date_time(self, user_id: str, date_time: str) -> None: # Save date_time to db
+        async with aiosqlite.connect(self.db_pass) as db:
+            await db.execute("UPDATE Events  SET date_time = ? WHERE user_id = ?", (date_time, user_id ))
+            await db.commit()
+
