@@ -28,6 +28,7 @@ class Database:
             return ''.join(res)
     
     async def save_user_link(self, user_id: str, user_link: str, uuid_code: str) -> None:
+
         async with aiosqlite.connect(self.db_pass) as db:
             pass
         
