@@ -16,11 +16,10 @@ async def handle_request():
     link_id = query_params.get('link_id', 0)
     '''ТУТ ПОДКЛЮЧЕНИЕ К БД ЧТОБЫ ВЫТАЩИТЬ МЕТОДОМ КЛАССА 
     БД ССЫЛКУ НА КОТОРУЮ НУЖНО ПЕРЕНАПРАВИТЬ ФЛАСК'''
-    orig_link = Database.get_user_link(link_id)
-    logging.info(link_id)
-    g = get_link(link_id)
-    logging.info(g)
-    return redirect(g)
+    orig_link = await Database.get_user_link(link_id)
+    logging.info(orig_link)
+    '''здесь планируется передавать в БД линк айди и получать оригинальную ссылку чтобы на нее перейти'''
+    return redirect(orig_link)
 
 
 if __name__ == '__main__':
