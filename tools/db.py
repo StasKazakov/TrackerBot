@@ -38,7 +38,7 @@ class Database:
             await db.execute("INSERT INTO Events (user_id, root_link) VALUES (?,?)", (user_id, str))
             await db.commit()
             
-    async def save_date_time(self, user_id: str, date_time: str):
+    async def save_date_time(self, user_id: str, date_time: str) -> None:
         async with aiosqlite.connect(self.db_pass) as db:
             await db.execute("UPDATE Events  SET date_time = ? WHERE user_id = ?", (date_time, user_id ))
             await db.commit()
@@ -47,14 +47,17 @@ class Database:
         async with aiosqlite.connect(self.db_pass) as db: 
             cur =  await db.execute("SELECT root_link FROM Events WHERE user_id = ?", (user_id,))
             row = await cur.fetchone()
-            res = ''.join(row)
-            dict = json.loads(res)
-            result = dict.get(uuid_code)
-            return result
+            if row is None:
+                print("No link for this id")
+            else:
+                res = ''.join(row)
+                dict = json.loads(res)
+                result = dict.get(uuid_code)
+                return result
     
 async def main() -> None:
     db = Database("TrackerBot.db")
-    print(await db.get_user_link("660", "597e4b43-d995-426c-a25a-3f535624c998"))
+    await db.get_user_link("660", "597e4b43-d995-426c-a25a-3f535624c998" )
     
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
