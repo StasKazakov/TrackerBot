@@ -64,8 +64,13 @@ class Database:
             elif link_name not in list:
                 return False
          
-    async def save_date_time(self, user_id: str, date_time: str) -> None: # Save date_time to db
+    async def save_date_time(self, link_id: str, date_time: str) -> None: # Save date_time to db
         async with aiosqlite.connect(self.db_pass) as db:
-            await db.execute("UPDATE Events  SET date_time = ? WHERE user_id = ?", (date_time, user_id ))
+            await db.execute("INSERT INTO links (link_id, counter) VALUES (?,?)", (link_id, date_time))
             await db.commit()
-
+            
+    async def get_counter(self, link_id):
+        async with aiosqlite.connect(self.db_pass) as db:
+            cur = await db.execute("SELECT counter FROM Events WHERE link_id = ? ", (link_id,))
+            res = await cur.fetchall()
+            # will be changed in future commits
