@@ -7,28 +7,25 @@ from aiogram import Router
 from aiogram.filters import Text, StateFilter
 from aiogram import Bot, types
 from aiogram.fsm.context import FSMContext
-<<<<<<< HEAD
+
 
 from url_flask import UTMTracker
 from run import db
 from tools.keyboard import menu_getter, cancel_button
-=======
+
 from aiogram.fsm.state import StatesGroup, State
 from run import db
 from url_flask import UTMTracker
 from tools.db import Database
 from tools.keyboard import menu_getter, start_menu, cancel_button
->>>>>>> upstream/main
+
 from tools.states import States
 from tools.delete import delete
 from main import language_data
 
 router = Router()
 config: Config = load_config()
-<<<<<<< HEAD
 
-=======
->>>>>>> upstream/main
 
 async def state_geter(strs: str) -> str:
     return strs.split(':')[1]
