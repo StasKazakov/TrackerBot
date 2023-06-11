@@ -1,5 +1,6 @@
 import aiosqlite
 import json
+import asyncio
 from datetime import datetime
 
 class Database:
@@ -28,23 +29,22 @@ class Database:
             res = await cur.fetchone()
             return ''.join(res)
 
-    async def setter(self, user_id: str, orig_link: str, link_id: str): # Save user_link to db
+    async def save_user_link(self, user_id: str, orig_link: str, link_id: str, link_name: str) -> None: # Save user_link to db
         async with aiosqlite.connect(self.db_pass) as db:
-            pass
-            
+            await db.execute("INSERT INTO links (link_id, user_id, orig_link) VALUES (?,?,?)", (link_id, user_id, orig_link))
+            await db.commit()
                         
     async def save_date_time(self, user_id: str, date_time: str) -> None: # Save date_time to db
         async with aiosqlite.connect(self.db_pass) as db:
             await db.execute("UPDATE Events  SET date_time = ? WHERE user_id = ?", (date_time, user_id ))
             await db.commit()
     
-    async def get_user_link(self, user_id: str, link_id: str) -> str: # Get user link
+    async def get_user_link(self, link_id: str) -> str: # Get user link
         async with aiosqlite.connect(self.db_pass) as db: 
-            cur =  await db.execute("SELECT root_link FROM Events WHERE user_id = ?", (user_id,))
+            cur =  await db.execute("SELECT orig_link FROM links WHERE link_id = ?", (link_id,))
             row = await cur.fetchone()
             if row is None:
-                return "No links for this id"
+                return "No link for this link_id"
             else:
-                dict = json.loads(''.join(row))
-                return dict.get(link_id)
+                return ''.join(row)
     
