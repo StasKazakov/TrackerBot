@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 log_level = logging.INFO
 bl.basic_colorized_config(level=log_level)
 
-db = Database("TrackerBot.db")
+db = Database()
 app = Quart(__name__)
 
 
