@@ -45,7 +45,7 @@ async def main():
     #logging
     logging.basicConfig(filename="all_log.log", level=logging.INFO, format="%(asctime)s - $(levelname)s - %(message)s")
     bl.basic_colorized_config(level=logging.INFO)
-
+    logger.info("Starting bot")
     #connecting all packages and environment variables
     config: Config = load_config()
     bot: Bot = Bot(token=config.tg_bot.token, parse_mode='HTML')

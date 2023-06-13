@@ -10,14 +10,9 @@ from aiogram import Bot, types
 from aiogram.fsm.context import FSMContext
 
 
-from url_flask import UTMTracker
-from run import db
-from tools.keyboard import menu_getter, cancel_button
-
 from aiogram.fsm.state import StatesGroup, State
 from run import db
 from url_flask import UTMTracker
-from tools.db import Database
 from tools.keyboard import menu_getter, start_menu, cancel_button
 
 from tools.states import States
