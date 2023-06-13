@@ -107,3 +107,11 @@ class Text(LangMoodel):
             return "Дякуємо за звернення, дуже скоро ви отримаєте відповідь"
         elif lang == self.RU:
             return "Спасибо за обращение, очень скоро вы получите ответ"
+        
+    def your_links(self, lang: str) -> str:
+        if lang == self.EN:
+            return "Here are your links:"
+        elif lang == self.UA:
+            return "Ось ваші посилання:"
+        elif lang == self.RU:
+            return "Вот вашы ссылки:"

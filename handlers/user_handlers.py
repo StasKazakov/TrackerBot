@@ -11,7 +11,7 @@ from aiogram.fsm.context import FSMContext
 
 from aiogram.fsm.state import StatesGroup, State
 from url_flask import UTMTracker
-from tools.keyboard import menu_getter, start_menu, cancel_button, back_button
+from tools.keyboard import menu_getter, start_menu, cancel_button, back_button, links
 from tools.db import Database
 from tools.states import States
 from tools.delete import delete
@@ -59,11 +59,12 @@ async def link_awaiting(message: types.Message, state: FSMContext, bot: Bot):
 @router.callback_query(Text(text=['state']))
 async def statistics_button(callback: types.CallbackQuery):
     lang = await db.check_language(str(callback.from_user.id))
-    links = await db.get_names_link(str(callback.from_user.id))
-    if bool(links) == False:
+    links_name = await db.get_names_link(str(callback.from_user.id))
+    if bool(links_name) == False:
         await callback.message.edit_text(text=language_data.statisics_without_link(lang), reply_markup=back_button(lang))
     else: 
         pass
+        # await callback.message.edit_text(text=language_data.your_links(lang), reply_markup=links(links_name))
 
 @router.callback_query(Text(text=['back']))
 async def back(callback: types.CallbackQuery, state: FSMContext):

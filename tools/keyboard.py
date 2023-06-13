@@ -71,3 +71,15 @@ def periods(lang: str) -> InlineKeyboardMarkup:
             [types.InlineKeyboardButton(text="За весь период", callback_data='alltime')],
             [types.InlineKeyboardButton(text="Выбрать даты", callback_data='select_dates')]])
         return button
+    
+def links(links_name: list) -> InlineKeyboardMarkup:
+    pass
+    # callback_data = []
+    # for i in range(len(links_name)):
+    #    callback_data.append(f"callback_{i}")
+    # links_dict = dict(zip(links_name, callback_data))
+    # inline_keyboards = []
+    # for text, data in links_dict.items():
+    #    inline_keyboards.append([types.InlineKeyboardButton(text=text, callback_data=data)])
+    # links = InlineKeyboardMarkup(inline_keyboard= inline_keyboards)
+    # return links
