@@ -44,6 +44,17 @@ def cancel_button(lang: str) -> InlineKeyboardMarkup:
         button = InlineKeyboardMarkup(inline_keyboard=[[types.InlineKeyboardButton(text='Отмена', callback_data='cancel')]])
         return button
 
+def back_button(lang: str) -> InlineKeyboardMarkup:
+    if lang == 'en':
+        button = InlineKeyboardMarkup(inline_keyboard=[[types.InlineKeyboardButton(text='Back', callback_data='back')]])
+        return button
+    elif lang == 'ua':
+        button = InlineKeyboardMarkup(inline_keyboard=[[types.InlineKeyboardButton(text='Назад', callback_data='back')]])
+        return button
+    elif lang == 'ru':
+        button = InlineKeyboardMarkup(inline_keyboard=[[types.InlineKeyboardButton(text='Назад', callback_data='back')]])
+        return button
+
 def periods(lang: str) -> InlineKeyboardMarkup:
     if lang == 'en':
         button = InlineKeyboardMarkup(inline_keyboard=[

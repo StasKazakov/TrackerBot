@@ -5,18 +5,19 @@ from datetime import datetime
 
 class Database:
 
-    def __init__(self, db_pass: str):
-        self.db_pass = db_pass
+    def __init__(self):
+        self.db_pass: str = "TrackerBot.db"
         
-    async def add_user(self, user_id: str, name_tg: str) -> None:
+    async def add_user(self, user_id: str, name_tg: str) -> bool:
         async with aiosqlite.connect(self.db_pass) as db:
             cursor = await db.execute("SELECT user_id FROM user_lang WHERE user_id = ?", (user_id,))
             res = await cursor.fetchall()
             if bool(len(res)) == False:
                 await db.execute("INSERT INTO user_lang (user_id, name_tg) VALUES (?,?)", (user_id, name_tg ))
                 await db.commit()
+                return False
             else:
-                pass
+                return True
     
     async def save_language(self, user_id: str, language: str) -> None: # Saving chose language to database  
         async with aiosqlite.connect(self.db_pass) as db:
@@ -68,7 +69,12 @@ class Database:
         async with aiosqlite.connect(self.db_pass) as db:
             await db.execute("INSERT INTO links (link_id, counter) VALUES (?,?)", (link_id, date_time))
             await db.commit()
-            
+    
+    async def save_request(self, user_id: str, request_text: str, request_name: str)-> None:
+        async with aiosqlite.connect(self.db_pass) as db:
+            await db.execute("INSERT INTO requests (user_id, request_text, request_name) VALUES (?,?,?)", (user_id, request_text, request_name))
+            await db.commit()
+      
     async def get_counter(self, link_id):
         async with aiosqlite.connect(self.db_pass) as db:
             cur = await db.execute("SELECT counter FROM Events WHERE link_id = ? ", (link_id,))

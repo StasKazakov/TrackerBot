@@ -2,7 +2,7 @@ import logging
 from urllib.parse import urlparse, parse_qs
 
 from quart import request, redirect, Quart
-from run import db
+from tools.db import Database
 import betterlogging as bl
 
 
@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 log_level = logging.INFO
 bl.basic_colorized_config(level=log_level)
 
-
+db = Database("TrackerBot.db")
 app = Quart(__name__)
 
 

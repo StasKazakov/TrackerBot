@@ -54,19 +54,19 @@ class Text(LangMoodel):
 
     def link_getter(self, lang: str) -> str:
         if lang == self.EN:
-            return "Here's the link you need to use to count the conversions on it."
+            return "Here's the link you need to use to count the conversions on it:"
         elif lang == self.RU:
-            return "Вот ссылка которую нужно использовать чтобы считать по ней переходы."
+            return "Вот ссылка которую нужно использовать чтобы считать по ней переходы:"
         elif lang == self.UA:
-            return "Ось посилання, яке потрібно використовувати, щоб рахувати за ним переходи."
+            return "Ось посилання, яке потрібно використовувати, щоб рахувати за ним переходи:"
 
     def wrong_link(self, lang: str) -> str:
         if lang == self.EN:
-            return "Incorrect link, try again. The link must contain 'https'."
+            return "Incorrect link, try again. The link must contain 'www', 'https', '://'."
         elif lang == self.UA:
-            return "Некоректне посилання, спробуйте ще раз. Посилання має містити 'https'."
+            return "Некоректне посилання, спробуйте ще раз. Посилання має містити 'www', 'https', '://'."
         elif lang == self.RU:
-            return "Некорректная ссылка, попробуйте еще раз. Ссылка должна содержать 'https'."
+            return "Некорректная ссылка, попробуйте еще раз. Ссылка должна содержать 'www', 'https', '://'."
 
     def statisics_without_link(self, lang: str) -> str:
         if lang == self.EN:
