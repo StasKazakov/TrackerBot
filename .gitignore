@@ -7,3 +7,5 @@ venv/
 __init__.py/
 all_log.log
 tools/dbcopy.py
+tools/mysqldb.py
+tools/test_db.py
