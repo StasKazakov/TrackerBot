@@ -1,4 +1,5 @@
 import aiosqlite
+import asyncio
 from datetime import datetime
 
 class Database:
@@ -85,4 +86,10 @@ class Database:
         async with aiosqlite.connect(self.db_pass) as db: # accepts such parameters: link_id, data_from, data_to
             res = await db.execute_fetchall("SELECT counter FROM Events WHERE link_id = ? AND counter BETWEEN ? AND ?", (link_id, data_from, data_to))
             return len(res)
-            
+    
+    async def delete_link(self, link_name): # Delete link from db, accepts such parameters: link_name
+        async with aiosqlite.connect(self.db_pass) as db:
+            res = await self.get_link_id(link_name)
+            await db.execute("DELETE FROM Events WHERE link_id = ?", (res,))
+            await db.execute("DELETE FROM links WHERE link_id = ?", (res,))
+            await db.commit()          
